@@ -2,12 +2,10 @@ package com.kseyko.newsappmvvm.ui.fragments
 
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import androidx.activity.viewModels
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.kseyko.newsappmvvm.R
 import com.kseyko.newsappmvvm.adapters.NewsAdapter
@@ -28,9 +26,9 @@ import com.kseyko.newsappmvvm.util.Resource
  */
 class BreakingNewsFragment : Fragment(R.layout.fragment_breaking_news) {
 
-    private lateinit var viewModel : NewsViewModel
-    lateinit var newsAdapter : NewsAdapter
-    private var binding : FragmentBreakingNewsBinding? = null
+    private lateinit var viewModel: NewsViewModel
+    lateinit var newsAdapter: NewsAdapter
+    private var binding: FragmentBreakingNewsBinding? = null
     private var TAG = "BreakingNewsFragment"
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -38,19 +36,21 @@ class BreakingNewsFragment : Fragment(R.layout.fragment_breaking_news) {
         binding = FragmentBreakingNewsBinding.bind(view)
         viewModel = (activity as NewsActivity).viewModel
         setupRecyclerView()
+        setOnClickListener()
+
 
         viewModel.breakingNews.observe(viewLifecycleOwner, Observer { response ->
-            when(response){
-                is Resource.Success->{
+            when (response) {
+                is Resource.Success -> {
                     hideProgressBar()
-                    response.data.let {newsResponse ->
+                    response.data.let { newsResponse ->
                         newsAdapter.differ.submitList(newsResponse?.articles)
                     }
                 }
                 is Resource.Error -> {
                     hideProgressBar()
-                    response.message.let {message ->
-                        Log.e(TAG,"An error occured: $message")
+                    response.message.let { message ->
+                        Log.e(TAG, "An error occured: $message")
                     }
                 }
                 is Resource.Loading -> {
@@ -60,14 +60,27 @@ class BreakingNewsFragment : Fragment(R.layout.fragment_breaking_news) {
         })
     }
 
-    private fun hideProgressBar(){
+    private fun setOnClickListener() {
+        newsAdapter.setOnItemClickListener {
+            val bundle = Bundle().apply {
+                putSerializable("article", it)
+            }
+            findNavController().navigate(
+                R.id.action_breakingNewsFragment_to_articleFragment,
+                bundle
+            )
+        }
+    }
+
+    private fun hideProgressBar() {
         binding?.paginationProgressBar?.visibility = View.INVISIBLE
     }
 
-    private fun showProgressBar(){
+    private fun showProgressBar() {
         binding?.paginationProgressBar?.visibility = View.VISIBLE
     }
-    private fun setupRecyclerView(){
+
+    private fun setupRecyclerView() {
         newsAdapter = NewsAdapter()
         binding?.rvBreakingNews?.apply {
             adapter = newsAdapter

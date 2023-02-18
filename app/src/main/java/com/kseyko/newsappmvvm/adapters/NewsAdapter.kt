@@ -33,6 +33,7 @@ class NewsAdapter : RecyclerView.Adapter<NewsAdapter.ArticleViewHolder>() {
                 Toast.makeText(itemView.context, article.title , Toast.LENGTH_SHORT).show()
                 onItemClickListener?.invoke(article)
             }
+
         }
     }
 
@@ -49,6 +50,10 @@ class NewsAdapter : RecyclerView.Adapter<NewsAdapter.ArticleViewHolder>() {
 
     val differ = AsyncListDiffer(this, differCallBack)
     private var onItemClickListener: ((Article) -> Unit)? = null
+
+    fun setOnItemClickListener(listener: (Article) -> Unit){
+        onItemClickListener = listener
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ArticleViewHolder {
         val binding =
