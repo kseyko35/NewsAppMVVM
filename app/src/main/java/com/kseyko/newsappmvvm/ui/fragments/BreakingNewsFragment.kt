@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.kseyko.newsappmvvm.R
@@ -27,7 +26,7 @@ import com.kseyko.newsappmvvm.util.Resource
 class BreakingNewsFragment : Fragment(R.layout.fragment_breaking_news) {
 
     private lateinit var viewModel: NewsViewModel
-    lateinit var newsAdapter: NewsAdapter
+    private lateinit var newsAdapter: NewsAdapter
     private var binding: FragmentBreakingNewsBinding? = null
     private var TAG = "BreakingNewsFragment"
 
@@ -37,9 +36,11 @@ class BreakingNewsFragment : Fragment(R.layout.fragment_breaking_news) {
         viewModel = (activity as NewsActivity).viewModel
         setupRecyclerView()
         setOnClickListener()
+        observeLiveData()
+    }
 
-
-        viewModel.breakingNews.observe(viewLifecycleOwner, Observer { response ->
+    private fun observeLiveData() {
+        viewModel.breakingNews.observe(viewLifecycleOwner) { response ->
             when (response) {
                 is Resource.Success -> {
                     hideProgressBar()
@@ -57,7 +58,7 @@ class BreakingNewsFragment : Fragment(R.layout.fragment_breaking_news) {
                     showProgressBar()
                 }
             }
-        })
+        }
     }
 
     private fun setOnClickListener() {

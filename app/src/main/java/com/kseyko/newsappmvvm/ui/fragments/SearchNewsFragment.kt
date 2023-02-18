@@ -5,7 +5,6 @@ import android.util.Log
 import android.view.View
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.kseyko.newsappmvvm.R
@@ -34,7 +33,7 @@ class SearchNewsFragment : Fragment(R.layout.fragment_search_news) {
     private lateinit var viewModel: NewsViewModel
     private lateinit var newsAdapter: NewsAdapter
     private var binding: FragmentSearchNewsBinding? = null
-    val TAG = "SearchNewsFragment"
+    private val TAG = "SearchNewsFragment"
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -60,7 +59,7 @@ class SearchNewsFragment : Fragment(R.layout.fragment_search_news) {
     }
 
     private fun observeLiveData() {
-        viewModel.searchNews.observe(viewLifecycleOwner, Observer { response ->
+        viewModel.searchNews.observe(viewLifecycleOwner) { response ->
             when (response) {
                 is Resource.Success -> {
                     hideProgressBar()
@@ -78,7 +77,7 @@ class SearchNewsFragment : Fragment(R.layout.fragment_search_news) {
                     showProgressBar()
                 }
             }
-        })
+        }
     }
 
     private fun setOnClickListener() {

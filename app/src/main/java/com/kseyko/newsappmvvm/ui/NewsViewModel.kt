@@ -3,6 +3,7 @@ package com.kseyko.newsappmvvm.ui
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.kseyko.newsappmvvm.models.Article
 import com.kseyko.newsappmvvm.models.NewsResponse
 import com.kseyko.newsappmvvm.repository.NewsRepository
 import com.kseyko.newsappmvvm.util.Resource
@@ -19,13 +20,13 @@ import retrofit2.Response
 ║      17,February,2023      ║
 ╚════════════════════════════╝
  */
-class NewsViewModel(val newsRepository: NewsRepository) : ViewModel() {
+class NewsViewModel(private val newsRepository: NewsRepository) : ViewModel() {
 
     val breakingNews: MutableLiveData<Resource<NewsResponse>> = MutableLiveData()
-    var breakingNewsPage = 1
+    private var breakingNewsPage = 1
 
     val searchNews: MutableLiveData<Resource<NewsResponse>> = MutableLiveData()
-    var searchNewsPage = 1
+    private var searchNewsPage = 1
 
     init {
         getBreakingNews("us")
@@ -61,4 +62,14 @@ class NewsViewModel(val newsRepository: NewsRepository) : ViewModel() {
         return Resource.Error(response.message())
     }
 
+    fun saveArticle(article: Article) = viewModelScope.launch {
+        newsRepository.insertArticle(article)
+    }
+
+    fun getSavedNews() = newsRepository.getSavedNews()
+
+
+    fun deleteArticle(article: Article) = viewModelScope.launch {
+        newsRepository.deleteArticle(article)
+    }
 }
