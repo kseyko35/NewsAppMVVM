@@ -1,5 +1,5 @@
 
-**An Android app that makes use of the following API to display a list of Albums sorted by title**:
+**An Android app that makes use of the following API to display a list of News sorted by title**:
 
 Api -> https://newsapi.org/
 
@@ -9,7 +9,7 @@ List of news -> https://newsapi.org/v2/top-headlines
    and stores the News list in the local database(Room Persistence library) for offline use.
 
 2. If there is no internet connection, the app displays a warning to the user to connect to the internet 
-   and if App database has offline albums to show then it will display the albums from the database 
+   and if App database has offline news to show then it will display the news from the database
    or it will show an error if the app has never been successfully connected to the api.
 
 3.  App automatically fetch & refresh data from server as soon as it is connected back to the internet.
@@ -19,7 +19,7 @@ List of news -> https://newsapi.org/v2/top-headlines
 5. Android Navigation Component is used to navigate between the screens. 
 
 
-The app employs MVVM ( Model-View-ViewModel architecture) and Repository design patterns. 
+The app employs MVVM (Model-View-ViewModel architecture) and Repository design patterns.
 The view observes LiveData collected in the ViewModel. Api and persistence operations are run off the main thread using coroutines. 
 Implemented some unit tests to test ViewModel & App Database.
 
@@ -42,7 +42,7 @@ Implemented some unit tests to test ViewModel & App Database.
 * Implement Dependency Inject Framework - Dagger or Hilt in the project.
 * Implement Data Binding to bind UI components to data sources.
 * Add some more tests for ex. Test case for when user is offline, Test case when user is connected back to Internet and UI tests for Activity.
-* Add Pagination to list of Albums so that all albums don’t load at the same time. Maximum 20 Albums should load at once and when the user scrolls, the next set of 20 albums loads and so on.
+* Add Pagination to list of News so that all news don’t load at the same time. Maximum 20 News should load at once and when the user scrolls, the next set of 20 news loads and so on.
 
 
 #### How to install

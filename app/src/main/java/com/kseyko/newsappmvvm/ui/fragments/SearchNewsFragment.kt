@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.AbsListView
+import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -41,11 +42,10 @@ class SearchNewsFragment : Fragment(R.layout.fragment_search_news) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentSearchNewsBinding.bind(view)
+
         setRecyclerView()
         setOnClickListener()
         observeLiveData()
-
-        viewModel = (activity as NewsActivity).viewModel
 
         var job: Job? = null
         binding?.etSearch?.addTextChangedListener { editableText ->
@@ -62,6 +62,7 @@ class SearchNewsFragment : Fragment(R.layout.fragment_search_news) {
     }
 
     private fun observeLiveData() {
+        viewModel = (activity as NewsActivity).viewModel
         viewModel.searchNews.observe(viewLifecycleOwner) { response ->
             when (response) {
                 is Resource.Success -> {
@@ -78,7 +79,7 @@ class SearchNewsFragment : Fragment(R.layout.fragment_search_news) {
                 is Resource.Error -> {
                     hideProgressBar()
                     response.message.let { message ->
-                        Log.e(TAG, "An error occured: $message")
+                        Toast.makeText(activity,"An error occured: $message", Toast.LENGTH_SHORT).show()
                     }
                 }
                 is Resource.Loading -> {
